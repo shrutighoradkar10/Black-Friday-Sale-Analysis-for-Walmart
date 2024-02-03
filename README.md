@@ -1,2 +1,2 @@
-# Black-Friday-Sale-Analysis-for-Walmart
+# Black-Friday-Sales-Analysis-for-Walmart
 Real-Time Sales and  Inventory Management
