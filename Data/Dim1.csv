@@ -1,0 +1,12 @@
+﻿product_id,name,category,price,supplier_id
+P500,Smartphone,Electronics,20000,S100
+P501,Laptop,Electronics,50000,S101
+P502,Refrigerator,Home Appliances,25000,S102
+P503,Novel,Books,200,S103
+P504,Football,Sports,400,S104
+P505,Coffee Maker,Home Appliances,150,S105
+P506,Cricket Bat,Sports,1000,S106
+P507,Sweater,Clothing,900,S107
+P508,Jeans,Clothing,1300,S108
+P509,Fiction,Books,130,S109
+P5010,Tablet,Electronics,10000,S1010
