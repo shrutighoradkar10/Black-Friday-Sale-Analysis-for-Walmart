@@ -1,0 +1,80 @@
+# SCHEMA of Fact table
+CREATE TABLE `single-brace-410112.Sales_Data.Fact_Sales_table` (
+    transaction_id String ,
+    product_id STRING,
+    timestamp STRING,
+    initial_quantity INT,
+    updated_quantity INT,
+    store_id STRING,
+
+
+); 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Deriving Multiple Business Matrix from below query  and preparing dashboards like top-selling products and categories,Monitoring real-time inventory levels,
+Calculating total revenue generated in real-time.
+
+
+WITH product_sales AS (
+  SELECT
+    P.product_id,
+    P.name,
+    P.category,
+    F.store_id as store_id,
+     ABS(SUM(updated_quantity) - SUM(initial_quantity)) AS quantity_sold,
+    SUM(P.price * updated_quantity) AS revenue_generated,
+   
+
+  FROM `single-brace-410112.Sales_Data.Fact_Sales_table` AS F
+  INNER JOIN `single-brace-410112.Sales_Data.Dim_Products` AS P ON F.product_id = P.product_id
+  GROUP BY P.product_id, P.name, P.category,F.store_id
+),
+category_sales AS (
+  SELECT
+    category,
+    SUM(quantity_sold) AS category_quantity,
+    SUM(revenue_generated) AS category_revenue,
+   product_sales.store_id
+  FROM product_sales
+  GROUP BY category, product_sales.store_id
+)
+
+SELECT main.*,store.location FROM (
+
+SELECT
+  ps.product_id,
+  ps.name,
+  ps.category,
+  ps.quantity_sold,
+  cs.store_id,
+  ps.revenue_generated,
+  cs.category_quantity,
+  cs.category_revenue,
+  ps.quantity_sold / cs.category_quantity AS category_share_quantity,
+  ps.revenue_generated / cs.category_revenue AS category_share_revenue,
+  ps.quantity_sold*cs.category_quantity as expected_sales,
+  ps.quantity_sold - (ps.quantity_sold*cs.category_quantity) AS quantity_diff,  
+  ps.revenue_generated - (  ps.quantity_sold * P.price) AS revenue_diff
+FROM product_sales AS ps
+INNER JOIN category_sales AS cs ON ps.category = cs.category
+INNER JOIN `single-brace-410112.Sales_Data.Dim_Products` AS P ON ps.product_id = P.product_id
+ORDER BY revenue_generated DESC) as main
+
+join `single-brace-410112.Sales_Data.Dim_Stores`  as store
+
+ON store.STORE_ID=main.store_id;
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
