@@ -18,9 +18,11 @@ Real-Time Sales and  Inventory Management
 Explanation:
 
 1. 2 Python mock generator will produce mock data in 3 different Pub/Sub topics.
-2. Cloud Functions will act like consumers as soon as the messages arrived in Pub/Sub topics function will get triggered.
+2. Cloud Functions will act like consumers as soon as the messages arrive in Pub/Sub topics function will get triggered.
 3. Consumer 1 is responsible for inserting data in BigQuery fact table with updated_quantity initially as None.
-4. Consumer 2 is responsible  for updating Quantity  where the product_id and store_id is same
-5.  
+4. Consumer 2 is responsible  for updating Quantity  where the product_id and store_id are same
+5. While updating If the product_id is not found in fact table means this is a suspicious record. These records will go into DLQ Pub/Sub topic.
+6. In BigQuery Derived important businees matrix. And Builded reports/dashboards using Lookup Studio.
+7. Dashboards are scheduled to be updated every 1 minute. 
 
 
